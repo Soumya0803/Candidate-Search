@@ -13,8 +13,8 @@ def index(request):
     if search:
         query = SearchCandidate(search, option)
         res_list = Resume.objects.raw(query)
-        paginator = Paginator(res_list, 25) # Show 25 contacts per page.
-        page_number = request.GET.get('page',0)
+        paginator = Paginator(res_list, 6) # Show 6 resumes per page.
+        page_number = request.GET.get('page',1)
         page_obj = paginator.get_page(page_number)
-        context = { 'page_obj': page_obj , 'query': query }
+        context = { 'page_obj': page_obj , 'query': query, 'search': search, 'option': option}
     return render(request, 'resume/index.html', context)
