@@ -1,5 +1,5 @@
 from jinjasql import JinjaSql
-from copy import deepcopy
+#from copy import deepcopy
 from six import string_types
 import re
 import Prefix
@@ -8,7 +8,6 @@ import os
 def strip_blank_lines(text):
     '''
     Removes blank lines from the text, including those containing only spaces.
-    https://stackoverflow.com/questions/1140958/whats-a-quick-one-liner-to-remove-empty-lines-from-a-python-string
     '''
     return os.linesep.join([s for s in text.splitlines() if s.strip()])
 
@@ -44,7 +43,7 @@ def SearchCandidate(keywords, query_type="sql"):
 def parse_keywords(keywords):
     #k='(Java AND Spring) OR (Python AND Django) OR (Ruby AND ("Ruby on Rails" OR ROR))' 
     #print(re.split('([^a-zA-Z0-9])',keywords)) 
-    return re.split('(\W)', keywords) 
+    return re.split('[(^"\|W]', keywords) 
     # "Ruby on Rails"
     # k=""
     # for i in keywords:
