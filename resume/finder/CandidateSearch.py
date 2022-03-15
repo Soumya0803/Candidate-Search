@@ -10,7 +10,7 @@ def strip_blank_lines(text):
     Removes blank lines from the text, including those containing only spaces.
     https://stackoverflow.com/questions/1140958/whats-a-quick-one-liner-to-remove-empty-lines-from-a-python-string
     '''
-    return os.linesep.join([s for s in text.splitlines() if s.strip()])
+    return os.linesep.join([s for s in text.splitlines() if s.strip()]).strip()
 
 def SearchCandidate(keywords, query_type="sql"):
     parsed_keywords=parse_keywords(keywords)
