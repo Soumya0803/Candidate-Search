@@ -19,6 +19,7 @@ class Prefix():
             print("uf")
         else:
             s=s+self.stack[self.top]
+            self.stack.pop()            
             self.top-=1
         return(s)
     def infix_to_prefix(self):

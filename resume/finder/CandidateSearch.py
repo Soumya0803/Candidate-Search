@@ -2,7 +2,7 @@ from jinjasql import JinjaSql
 from copy import deepcopy
 from six import string_types
 import re
-from . import Prefix
+import Prefix
 import os
 
 def strip_blank_lines(text):
@@ -74,7 +74,7 @@ def quote_string(parsed_keywords,query_type):
                 elif query_type=='django_orm':
                     parsed_keywords_quote.append("'{},'".format(val))    
                 else:
-                    parsed_keywords_quote.append("'{},'".format(val))    
+                    parsed_keywords_quote.append("/{},/".format(val))    
 
                 
     return parsed_keywords_quote
@@ -173,6 +173,7 @@ def apply_template(template, parameters,func_list):
             j.env.globals[func.__name__] = func
 
     query, bind_params = j.prepare_query(template, parameters)
+    print( query % bind_params)
     return( query % bind_params)
   
 
