@@ -17,7 +17,7 @@
     <!-- Custom styles for this template -->
     <style>
         :root {
-            --jumbotron-padding-y: 3rem;
+            --jumbotron-padding-y: 1rem;
         }
 
         .jumbotron {
@@ -29,8 +29,8 @@
 
         @media (min-width: 768px) {
             .jumbotron {
-                padding-top: calc(var(--jumbotron-padding-y) * 2);
-                padding-bottom: calc(var(--jumbotron-padding-y) * 2);
+                padding-top: calc(var(--jumbotron-padding-y) * 1);
+                padding-bottom: calc(var(--jumbotron-padding-y) * 1);
             }
         }
 
@@ -69,7 +69,8 @@
                 <div class="row">
                     <div class="col-sm-8 col-md-7 py-4">
                         <h4 class="text-white">Resume Finder</h4>
-                        <p class="text-muted">This project is used to find a resume based on Natural Search Queries among various Databases </p>
+                        <p class="text-muted">This project is used to find a resume based on Natural Search Queries
+                            among various Databases </p>
                     </div>
                     <div class="col-sm-4 offset-md-1 py-4">
                         <h4 class="text-white">Contact</h4>
@@ -111,20 +112,27 @@
                 {% endblock %}
             </div>
         </section>
-
-        <div class="album py-5 bg-light">
+        <div class="album py-2 bg-light">
             <div class="container">
 
                 <div class="row">
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            <div class="card-body">
-                              <h4 class="card-title">Alok Kumar</h4>
-                              <p class="card-text">Ruby on rails, Python, Django, HTML, CSS, JavaScript, SQL, MongoDB</p>
-                            </div>
-                          </div>
-                    </div>
+                    <blockquote class="blockquote text-center my-1">
+                         {% if query %}
+                         <p> QUERY: {{ query }} </p>
+                         {% else %}
+                         <p> please search for a resume </p>
+                         {% endif %}
+                    </blockquote>
+                </div>
 
+                <div class="row">
+                    {% block body %}
+                    {% endblock %}
+                </div>
+
+                <div class="row">
+                    {% block pagination %}
+                    {% endblock %}
                 </div>
             </div>
         </div>
@@ -136,11 +144,20 @@
             <p class="float-right">
                 <a href="#">Back to top</a>
             </p>
-            <p>Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
-            <p>New to Bootstrap? <a href="../../">Visit the homepage</a> or read our <a
-                    href="../../getting-started/">getting started guide</a>.</p>
+            <p> Resume Search &copy; Soumya Chopra </p>
+
         </div>
     </footer>
+    <script type="text/javascript">
+        window.onload = function () {
+            const params = new Proxy(new URLSearchParams(window.location.search), {
+                get: (searchParams, prop) => searchParams.get(prop),
+            });
+            oFormObject = document.forms['form'];
+            oFormObject.elements["search"].value = params.search;
+            oFormObject.elements["radio"].value = params.radio;
+        }
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
         integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"

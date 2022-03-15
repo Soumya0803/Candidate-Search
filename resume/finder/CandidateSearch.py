@@ -2,7 +2,7 @@ from jinjasql import JinjaSql
 #from copy import deepcopy
 from six import string_types
 import re
-import Prefix
+from . import Prefix
 import os
 
 def strip_blank_lines(text):
@@ -173,7 +173,7 @@ def apply_template(template, parameters,func_list):
 
     query, bind_params = j.prepare_query(template, parameters)
     print( query % bind_params)
-    return( query % bind_params)
+    return (query % bind_params)
   
 
 
