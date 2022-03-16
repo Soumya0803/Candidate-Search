@@ -3,6 +3,7 @@ from jinjasql import JinjaSql
 from six import string_types
 import re
 from . import Prefix
+from . import MongoInfix
 import os
 
 def strip_blank_lines(text):
@@ -15,7 +16,7 @@ def SearchCandidate(keywords, query_type="sql"):
     parsed_keywords=parse_keywords(keywords)
 
     parameters=quote_string(parsed_keywords,query_type)
-    
+
     params = {
     'text': parameters,   
     }
@@ -34,10 +35,8 @@ def SearchCandidate(keywords, query_type="sql"):
         '''
         return strip_blank_lines(apply_template(search_candidate_template_django_orm, parameters={'dimensions':params},func_list=[transform_dimensions_django_orm]))
     else:
-        search_candidate_template_mongodb = '''
-        db.Resume.find({{ transform_dimensions_mongodb(dimensions) }})
-        '''
-        return strip_blank_lines(apply_template(search_candidate_template_mongodb, parameters={'dimensions':params},func_list=[transform_dimensions_mongodb]))
+        return f"db.Resume.find({{ {transform_dimensions_mongodb(params)} }})"
+        
 
    
 def parse_keywords(keywords):
@@ -108,7 +107,6 @@ def transform_dimensions_django_orm(dimensions: dict) -> str:
     query_end=""
     for key, val in dimensions.items():
         for i in val:
-             
             if i=='('  or i==')':
                  query_end=query_end + ' ' + i
             elif i=='OR':
@@ -127,35 +125,10 @@ def transform_dimensions_mongodb(dimensions: dict) -> str:
    #{ $or: [ {text:  }, { text:}] }
    #OR (AND JAVA Python) RUby
     dim=dimensions['text']
-      
-    p = Prefix.Prefix(dim)
-    p.infix_to_prefix()
-    val=p.prefix
-
     #add wilcard
-    query_end=""
     #for key, val in dimension.items():
-        
-    for i,v in enumerate(p.prefix):
-            print (v)
-            if v=='AND' or v=='OR':
-                if not(val[i+1] =='AND' or  val[i+1] == 'OR'):
-                    if v=='OR':
-                        query_end = query_end + '{ $or: [{text:' + val[i+1] + '},{ text:' + val[i+2] + '}]}'
-                    
-                    elif v=='AND':
-                        query_end = query_end + '{ $and: [{text:' + val[i+1] + '},{ text:' + val[i+2] + '}]}'
-                
-                   # i +=2
-            
-            else:
-                if v=='AND' or v=='OR':
-                    if v=='OR':
-                        query_end = query_end + '{ $or:'
-
-                    elif v=='OR':
-                        query_end = query_end + '{ $and:'
-    return query_end       
+    query_end = MongoInfix.evaluate(dim)
+    return query_end    
 
 
 
