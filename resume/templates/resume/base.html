@@ -116,11 +116,18 @@
             <div class="container">
 
                 <div class="row">
-                    <blockquote class="blockquote text-center my-1">
+                    <blockquote class="blockquote  my-1">
                          {% if query %}
                          <p> QUERY: {{ query }} </p>
                          {% else %}
-                         <p> please search for a resume </p>
+                         <h3> Please search for a resume </h3>
+                         
+                         <p> Input Format Examples:
+                            <ul><li>Java</li> 
+                            <li>Java OR python </li>
+                            <li>(Java AND Spring) OR (Python AND Django) OR (Ruby AND ("Ruby on Rails" OR ROR))</li>
+                         </ul>
+                         <p>Note: Multi-words in the input must be enclosed in double quotes. </p>
                          {% endif %}
                     </blockquote>
                 </div>
