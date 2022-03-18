@@ -42,7 +42,7 @@ def SearchCandidate(keywords, query_type="sql"):
 def parse_keywords(keywords):
     #k='(Java AND Spring) OR (Python AND Django) OR (Ruby AND ("Ruby on Rails" OR ROR))' 
     #print(re.split('([^a-zA-Z0-9])',keywords)) 
-    return re.split('(".+?"|\W)', keywords) 
+    return re.split('(".+?"|\'.+?\'|\W)', keywords) 
     # "Ruby on Rails"
     # k=""
     # for i in keywords:
