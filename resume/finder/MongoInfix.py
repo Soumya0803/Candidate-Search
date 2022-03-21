@@ -16,10 +16,14 @@ def applyOp(a, b, op):
 		return f"$or:[{strget(a)}, {strget(b)}]"
 
 def evaluate(tokens):
-  # stack to store integer values.
+  # stack to store values
   values = []
-  # stack to store operators.
+  # stack to store operators AND/OR
   ops = []
+  if len(tokens)==1:
+    values.append(f"\"text\":\"{tokens[0]}\"")
+    return values[-1]
+
   i = 0
   while i < len(tokens):
     # print(tokens[i], values, ops)
@@ -64,11 +68,11 @@ def evaluate(tokens):
     op = ops.pop()
         
     values.append(applyOp(val1, val2, op))
-  
+     
   return values[-1]
 
 if __name__ == "__main__":
 	
-	print(evaluate(["python", "OR", "java"]))
+	print(evaluate(["python", "OR", "java" , 'OR', '(','Mongo', 'AND', 'Mysql',')']))
 	
 

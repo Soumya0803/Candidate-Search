@@ -21,9 +21,7 @@ def SearchCandidate(keywords, query_type="sql"):
     'text': parameters,   
     }
         
-    #Poll.objects.get(
-    #Q(question__startswith='Who'),
-    #Q(pub_date=date(2005, 5, 2)) | Q(pub_date=date(2005, 5, 6)))
+    
     if query_type=='sql':  
         search_candidate_template_sql = '''
         select id, name, text from Resume_Resume where {{ transform_dimensions_sql(dimensions) }}
@@ -40,15 +38,11 @@ def SearchCandidate(keywords, query_type="sql"):
 
    
 def parse_keywords(keywords):
-    #k='(Java AND Spring) OR (Python AND Django) OR (Ruby AND ("Ruby on Rails" OR ROR))' 
-    #print(re.split('([^a-zA-Z0-9])',keywords)) 
+    '''
+    splits the input string    
+    '''
     return re.split('(".+?"|\'.+?\'|\W)', keywords) 
-    # "Ruby on Rails"
-    # k=""
-    # for i in keywords:
-    #     #if i in re.search('"([^a-zA-Z0-9])"', keywords):
-    #         k.append(i)
-    # return k
+    
                      
 def quote_string(parsed_keywords,query_type):
     '''
@@ -56,12 +50,9 @@ def quote_string(parsed_keywords,query_type):
     and returns the string enclosed in single quotes.
     '''
     parsed_keywords_quote=[]
-    #params = deepcopy(parsed_keywords)
     for  val in parsed_keywords:
         if isinstance(val, string_types):
-            #val = str(val)
-            #val = val.replace("'", "''")
-            #print(val)
+            
             if val==" " or val=="" or val==' 'or val=='':
                 pass        
             elif val=='(' or val==')' or val=='(' or val==')'or val=='AND' or  val=='OR':
@@ -73,8 +64,7 @@ def quote_string(parsed_keywords,query_type):
                     parsed_keywords_quote.append("'{},'".format(val))    
                 else:
                     parsed_keywords_quote.append("/{},/".format(val))    
-
-                
+           
     return parsed_keywords_quote
     
 
@@ -92,18 +82,13 @@ def transform_dimensions_sql(dimensions: dict) -> str:
             else:
                 query_end= query_end+' text like ' + i
         
-    # q=""
-    # for key, val in dimensions.items():
-    #      q=" text like ".join( val)        
     return query_end
 
 def transform_dimensions_django_orm(dimensions: dict) -> str:
     '''
-    Generate SQL for aliasing or transforming the dimension columns.
+    Generate django_orm  query for aliasing or transforming the dimension columns.
     '''
-    #Poll.objects.get(
-    #Q(question__startswith='Who'),
-    #Q(pub_date=date(2005, 5, 2)) | Q(pub_date=date(2005, 5, 6)))
+
     query_end=""
     for key, val in dimensions.items():
         for i in val:
@@ -120,13 +105,8 @@ def transform_dimensions_django_orm(dimensions: dict) -> str:
 
 
 def transform_dimensions_mongodb(dimensions: dict) -> str:
-   #db.things.find({$and: [{$or : [{'a':1},{'b':2}]},{$or : [{'a':2},{'b':3}]}] })
-   #{ $or: [ { <expression1> }, { <expression2> }, ... , { <expressionN> } ] }
-   #{ $or: [ {text:  }, { text:}] }
-   #OR (AND JAVA Python) RUby
+   
     dim=dimensions['text']
-    #add wilcard
-    #for key, val in dimension.items():
     query_end = MongoInfix.evaluate(dim)
     return query_end    
 
@@ -155,5 +135,3 @@ if __name__ == "__main__":
     keywords = input("Enter keywords:")
     query_type = input("Enter Query Type:")
     SearchCandidate(keywords, query_type)
-#select * from resume where text like "%java%"  and  text like  "%SPRING%"  OR text like "%Python%" AND  text like "%Djang%" OR 
- #text like "%Ruby%" AND  text like '%"Ruby on Rails"%' OR text like  "%ROR%";
